@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDaoImpl implements GameDao {
 
@@ -114,6 +116,53 @@ public class GameDaoImpl implements GameDao {
             }
         }
         return dto;
+    }
+
+    @Override
+    public List<GameDto> findAll() {
+        List<GameDto> list = new ArrayList<>();   // 외부로 전달 시킬 리스트
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection conn = dbConn();
+        try {
+            String sql = "SELECT * FROM `game`";
+
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id_2 = rs.getInt("id");
+                int marble_2 = rs.getInt("gusl");
+                String name = rs.getString("name");
+                String userId_2 = rs.getString("userid");
+                String userPw_2 = rs.getString("userpw");
+                GameDto dto = new GameDto();
+
+                dto.setId(id_2);
+                dto.setGusl(marble_2);
+                dto.setName(name);
+                dto.setUserId(userId_2);
+                dto.setUserPw(userPw_2);
+                list.add(dto);   // dto 를 담는다
+            }
+        } catch (SQLException e) {
+            System.out.println("error: " + e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+
+                if (conn != null && !conn.isClosed()) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 
     @Override

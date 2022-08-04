@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class MainClass {
@@ -6,6 +7,15 @@ public class MainClass {
         t.aa();
         System.out.println("헬로 오징어 게임");
         GameDao dao = new GameDaoImpl();
+        List<GameDto> list = dao.findAll();
+        int i = 1;
+        for (GameDto d : list) {
+            System.out.println("번호: " + i++);
+            System.out.println("아이디: " + d.getUserId());
+            System.out.println("패스워드: " + d.getUserPw());
+            System.out.println("이름: " + d.getName());
+            System.out.println("구슬갯수: " + d.getGusl());
+        }
         // 회원가입 -> 저장
         Scanner sc = new Scanner(System.in);
 //        System.out.print("아이디입력: ");
